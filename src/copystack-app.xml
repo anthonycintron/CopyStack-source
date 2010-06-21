@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application xmlns="http://ns.adobe.com/air/application/1.5">
+	<id>CopyStack</id>
+	<filename>CopyStack</filename>
+	<name>Copy Stack</name>
+	<version>Alpha 0.1</version>
+	<description>
+		Copy Stack is a great to for multi-copying. This utility is great for
+		needing to copy more than one text blob. 
+	</description>
+	<copyright>Copyrights 2010 Supdun, LLC.</copyright>
+	<initialWindow>
+		<content>CopyStack.swf</content>
+		<title>Copy Stack</title>
+		<systemChrome>none</systemChrome>
+		<transparent>true</transparent>
+		<visible>true</visible>
+		<width>350</width>
+		<height>201</height>
+		<x>1100</x>
+		<y>20</y>
+	</initialWindow>
+	<icon>
+		<image16x16>/imgs/copyStack-16x16.png</image16x16>
+		<image32x32>/imgs/copyStack-32x32.png</image32x32>
+		<image48x48>/imgs/copyStack-48x48.png</image48x48>
+		<image128x128>/imgs/copyStack-128x128.png</image128x128>
+	</icon>
+</application>
