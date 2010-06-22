@@ -22,7 +22,7 @@ package {
 	
 		private var debugTxt:TextField;
 		private var buffer:Vector.<String>;
-		private var numBuffer:int = 10;
+		private var numBuffer:int = 5;
 		private var txtFormat:TextFormat;
 		
 		[Embed(source="imgs/copyStack-flat-bckgrnd.png")]
@@ -31,23 +31,27 @@ package {
 		public function CopyStack()
 		{
 			setup();
-			debugger();
+			styleFormat();
+
 		}
 		
-		private function debugger():void
+		private function styleFormat():void
 		{
+		
 			txtFormat = new TextFormat();
-			txtFormat.color = 0xffffff;
+			txtFormat.color = 0xcccccc;
 			txtFormat.size = 13;
+			
 			debugTxt = new TextField();
 			debugTxt.border = false;
 			debugTxt.width = 345;
 			debugTxt.height = 200;
 			debugTxt.x = 10;
-			debugTxt.y = 10;
+			debugTxt.y = 140;
 			debugTxt.wordWrap = true;
 			debugTxt.defaultTextFormat = txtFormat;
 			addChild(debugTxt);
+			
 		}
 		
 		private function setup():void
@@ -74,8 +78,12 @@ package {
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 		}
 		
+		
 		protected function onKeyUp(e:KeyboardEvent):void
 		{
+			// if paste...find the item was paste and pop it out
+			// of the buffer.
+			
 			var key:int;
 			if ( e.altKey && e.shiftKey )
 			{
@@ -98,6 +106,7 @@ package {
 						key = 5;
 						break;
 				}
+				
 				setCliboard(key);
 			}
 			
@@ -105,22 +114,17 @@ package {
 			if ( e.altKey && e.keyCode == 67 )
 				clear();
 			
-			if ( e.altKey && e.keyCode == 76 )
-				showList();
+//			if ( e.altKey && e.keyCode == 76 )
+				
 			
 			visible = false;
-			debugTxt.visible = false;
-			_list.visible = false;
 		}
 		
 		private var _list:Sprite;
 		
 		private function showList():void
 		{
-			hideShowMainView();
-			
-			if ( _list.numChildren > 0 )
-				_list.removeChildren();
+			removeChildren(_list);
 			
 			_list = new Sprite();
 			_list.x = 5;
@@ -131,7 +135,24 @@ package {
 				renderListItem();
 		}
 		
-		
+		/**
+		 *
+		 * removes child sprites within a main sprite.
+		 */
+		private function removeChildren(value:Sprite):void
+		{	
+			if ( value == null )
+			return;
+			
+			while(value.numChildren)
+			{
+				value.removeChildAt(0);
+			}
+		}
+
+		/**
+		 * clear the stack list.
+		 */
 		private function clear():void
 		{
 			Clipboard.generalClipboard.clearData(ClipboardFormats.TEXT_FORMAT);
@@ -162,7 +183,7 @@ package {
 				
 				var copyTxt:TextField = new TextField();
 				copyTxt.defaultTextFormat = txtFormat;
-				copyTxt.text = "["+i+"]" + buffer[i];
+				copyTxt.text = "["+i+"] " + buffer[i];
 				copyTxt.x = 5;
 				copyTxt.width = 350;
 				item.addChild(copyTxt);	
@@ -208,7 +229,8 @@ package {
 			// push new item  into history.
 			buffer.push(currentClipboard);
 			
-			debugTxt.appendText( "\n"+"["+(buffer.length - 1)+"] "+Clipboard.generalClipboard.getData(ClipboardFormats.TEXT_FORMAT).toString().substr(0, 50));
+			/*debugTxt.appendText( "\n"+"["+(buffer.length - 1)+"] "+Clipboard.generalClipboard.getData(ClipboardFormats.TEXT_FORMAT).toString().substr(0, 50));*/
+			showList();
 			
 			_timer = new Timer(800,1);
 			_timer.addEventListener(TimerEvent.TIMER_COMPLETE, onTimerComplete);
@@ -235,6 +257,7 @@ package {
 		protected function onKeyDown(e:KeyboardEvent):void
 		{
 			visible = true;
+			showList();
 		}
 		
 	}
