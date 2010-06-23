@@ -78,11 +78,10 @@ package {
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 		}
 		
+		private var poppedClipboard:String;
 		
 		protected function onKeyUp(e:KeyboardEvent):void
 		{
-			// if paste...find the item was paste and pop it out
-			// of the buffer.
 			
 			var key:int;
 			if ( e.altKey && e.shiftKey )
@@ -90,6 +89,9 @@ package {
 				debugTxt.text = "[ALT] + [SHIFT] + ";
 				switch( e.keyCode )
 				{
+					case 48:
+						key = 0;
+						break;
 					case 49:
 						key = 1;
 						break;
@@ -107,15 +109,21 @@ package {
 						break;
 				}
 				
+				
+				// set to clipboard
 				setCliboard(key);
+				
+			
+				// pop from list
+				poppedClipboard = buffer[key];
+				buffer.splice(key, 1);
+				
+				showList();
 			}
 			
 			
 			if ( e.altKey && e.keyCode == 67 )
 				clear();
-			
-//			if ( e.altKey && e.keyCode == 76 )
-				
 			
 			visible = false;
 		}
@@ -157,7 +165,7 @@ package {
 		{
 			Clipboard.generalClipboard.clearData(ClipboardFormats.TEXT_FORMAT);
 			debugTxt.text = "Copy Stack is empty.";
-			buffer = new Vector.<String>(1);
+			buffer = new Vector.<String>();
 		}
 		
 		
@@ -171,7 +179,7 @@ package {
 				var item:Sprite = new Sprite();
 				item.graphics.lineStyle(1, 0x333333);
 				item.graphics.beginFill(0x333333,.9);
-				item.graphics.drawRect(0,0, 350, 20);
+				item.graphics.drawRect(0,0, 337, 20);
 				item.name = String(i);
 				_list.addChild(item);
 				
@@ -204,9 +212,14 @@ package {
 			var currentClipboard:String = Clipboard.generalClipboard.getData(ClipboardFormats.TEXT_FORMAT).toString();
 			
 			if ( buffer.length == 0 )
+			{
 				pushToBuffer(currentClipboard);	
-			else if ( buffer.length > 0 && ((buffer[buffer.length-1]) != currentClipboard ) )
+			}
+			else if ( buffer.length > 0 && ((buffer[0]) != currentClipboard ) && (poppedClipboard != currentClipboard) )
+			{
+				trace("Last clipboard item does not match current clipboard")
 				pushToBuffer(currentClipboard);	
+			}
 		}
 		
 		/**
@@ -227,11 +240,15 @@ package {
 			visible = true;
 			
 			// push new item  into history.
-			buffer.push(currentClipboard);
+			buffer.unshift(currentClipboard);
 			
-			/*debugTxt.appendText( "\n"+"["+(buffer.length - 1)+"] "+Clipboard.generalClipboard.getData(ClipboardFormats.TEXT_FORMAT).toString().substr(0, 50));*/
 			showList();
 			
+			hide();
+		}
+		
+		private function hide():void
+		{
 			_timer = new Timer(800,1);
 			_timer.addEventListener(TimerEvent.TIMER_COMPLETE, onTimerComplete);
 			_timer.start();
