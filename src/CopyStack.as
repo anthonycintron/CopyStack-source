@@ -24,6 +24,7 @@ package {
 		private var buffer:Vector.<String>;
 		private var numBuffer:int = 5;
 		private var txtFormat:TextFormat;
+		private var colorArray:Array = [0xDAC22D,0x68993E,0x3B8399,0x993671, 0xC6B900,0x991089];
 		
 		[Embed(source="imgs/copyStack-flat-bckgrnd.png")]
 		private var BackgrndAsset:Class;
@@ -189,10 +190,20 @@ package {
 					item.y = (_list.getChildAt(num).y + 30);
 				}
 				
+				var	numTxtFrmt:TextFormat = new TextFormat();
+				numTxtFrmt.color = colorArray[i];
+				numTxtFrmt.size = 13;
+				
+				var numTxt:TextField = new TextField();
+				numTxt.defaultTextFormat = numTxtFrmt;
+				numTxt.text = "["+i+"]";
+				numTxt.x = 5;
+				item.addChild(numTxt);
+				
 				var copyTxt:TextField = new TextField();
 				copyTxt.defaultTextFormat = txtFormat;
-				copyTxt.text = "["+i+"] " + buffer[i];
-				copyTxt.x = 5;
+				copyTxt.text = buffer[i];
+				copyTxt.x = 25;
 				copyTxt.width = 350;
 				item.addChild(copyTxt);	
 			}
