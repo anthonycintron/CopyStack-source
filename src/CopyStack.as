@@ -2,12 +2,7 @@ package {
 	import flash.desktop.Clipboard;
 	import flash.desktop.ClipboardFormats;
 	import flash.desktop.NativeApplication;
-	import flash.display.Bitmap;
-	import flash.display.NativeWindow;
-	import flash.display.NativeWindowInitOptions;
-	import flash.display.Sprite;
-	import flash.display.StageAlign;
-	import flash.display.StageScaleMode;
+	import flash.display.*;
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.events.TimerEvent;
